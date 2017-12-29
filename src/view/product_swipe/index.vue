@@ -5,9 +5,9 @@
       <van-swipe-item v-for="frequencyIndex in productList">
         <van-row>
           <template v-for="product in competitiveProducts.slice(frequencyIndex * productNum, frequencyIndex * productNum + productNum)">
-            <div @click="onclickProduct(product)">
+            <div @click="onclickProduct(product)" class="cell_product">
               <van-col span="8" >
-                <van-row><img v-lazy="product.image" class="goods_van_swipe_image" /></van-row>
+                <van-row><img v-lazy="product.image"/></van-row>
                 <van-row>
                   <van-cell :value="product.name" />
                 </van-row>
@@ -37,16 +37,14 @@
     props: {
       competitiveProducts: Array,
       productNum: Number,
-      title: String
+      title: String,
+      productList: Array
     },
     data() {
-      var productList = [];
-      for (var i = 0; i < Math.floor(this.competitiveProducts.length / this.productNum); i++) {
-        productList.push(i);
-      }
       return {
-        productList: productList
       };
+    },
+    created() {
     },
     methods: {
       onclickProduct(product) {
@@ -58,6 +56,7 @@
 </script>
 <style>
   .cell_product{
+    text-align:center;
     display:inline;
   }
 

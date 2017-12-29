@@ -52,15 +52,6 @@ store.registerModule('vantStore', {
   }
 });
 
-/**
- * Vux转场动画
- */
-
-const history = window.sessionStorage;
-history.clear();
-// var historyCount = history.getItem('count') * 1 || 0;
-history.setItem('/', 0);
-
 new Vue({
   router,
   store,

@@ -79,3 +79,43 @@ const onProduct = function() {
   };
 };
 Mock.mock('/get/orderDetail', 'post', onProduct);
+const homePage = function() {
+  var allData = { hotCat: '', images: '', competitiveProducts: '' };
+  var hotRowLine = [];
+  var hotCatLine = [];
+  for (let i = 0; i < 2; i++) {
+    hotCatLine = [];
+    for (let j = 0; j < 4; j++) {
+      hotCatLine.push({
+        image: Random.image('200x200'),
+        productId: Random.integer(1000, 8000),
+        name: Random.ctitle(2, 4),
+        price: Random.integer(2, 100) + '积分'
+      });
+    }
+    hotRowLine.push(hotCatLine);
+  }
+  var images = [];
+  for (let i = 0; i < 4; i++) {
+    images.push({
+      image: Random.image('500x500'),
+      articleId: Random.integer(1000, 8000)
+    });
+  }
+  var competitiveProducts = { name: '精品推荐', product: [] };
+  for (let i = 0; i < 9; i++) {
+    competitiveProducts.product.push({
+      image: Random.image('80x80'),
+      articleId: Random.integer(1000, 8000),
+      name: Random.integer(1000, 8000)
+    });
+  }
+
+  allData.hotCat = hotRowLine;
+  allData.images = images;
+  allData.competitiveProducts = competitiveProducts;
+  return {
+    result: allData
+  };
+};
+Mock.mock('/get/homePageVal', 'post', homePage);

@@ -46,6 +46,7 @@
     },
     methods: {
       onClickLeft() {
+        console.log(this.$router);
         this.$router ? this.$router.back() : window.history.back();
       },
       onClickRight() {
@@ -70,6 +71,6 @@
     -webkit-font-smoothing: antialiased;
   }
   .header_style {
-    z-index: -1;
+    z-index: 100;
   }
 </style>

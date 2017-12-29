@@ -27,11 +27,9 @@
         </van-col>
       </div>
     </van-row>
-
     <van-cell-group class="user-group" >
       <van-cell icon="records" title="全部订单" to="orders"/>
     </van-cell-group>
-
     <van-cell-group>
       <van-cell icon="exchange" title="我的积分" isLink />
       <van-cell icon="gold-coin" title="我的优惠券" isLink />

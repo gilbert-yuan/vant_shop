@@ -65,9 +65,18 @@
         <template slot="sku-messages"></template>
         <!-- 自定义 sku actions -->
         <template slot="sku-actions" slot-scope="props">
-          <div class="van-sku-actions">
-            <van-button type="primary" bottom-action @click="props.skuEventBus.$emit('sku:buy')">买买买</van-button>
-          </div>
+         <van-row>
+            <van-col span="12">
+              <van-goods-action-big-btn  bottom-action @click="props.skuEventBus.$emit('sku:buy')">
+                加入购物车
+              </van-goods-action-big-btn>
+           </van-col>
+            <van-col span="12">
+              <van-goods-action-big-btn primary  bottom-action @click="props.skuEventBus.$emit('sku:buy')">
+                立即购买
+              </van-goods-action-big-btn>
+            </van-col>
+          </van-row>
         </template>
       </van-sku>
     </van-popup>
@@ -79,6 +88,7 @@ import {
   Tag,
   Col,
   Icon,
+  button,
   Cell,
   CellGroup,
   Swipe,
@@ -86,6 +96,7 @@ import {
   SwipeItem,
   Sku,
   Popup,
+  Row,
   GoodsAction,
   GoodsActionBigBtn,
   GoodsActionMiniBtn
@@ -97,6 +108,8 @@ export default {
     [Tag.name]: Tag,
     [Col.name]: Col,
     [Sku.name]: Sku,
+    [Row.name]: Row,
+    [button.name]: button,
     [Popup.name]: Popup,
     [Icon.name]: Icon,
     [Toast.name]: Toast,
@@ -116,8 +129,8 @@ export default {
       goods: {
         title: '美国伽力果（约680g/3个）',
         price: 2680,
+        goodsId: 30349,
         express: '免运费',
-        remain: 19,
         sku: {
           // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
           // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
@@ -212,7 +225,7 @@ export default {
     }
   }
   .van-goods-action-shop{
-    z-index: 10000;
+    z-index: 50;
   }
   .goods-detail{
     height:80%;
