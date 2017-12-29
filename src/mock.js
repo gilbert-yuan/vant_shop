@@ -31,7 +31,7 @@ const produceNewsData = function() {
       name: '' + Random.natural(), // Random.cname() 随机生成一个常见的中文姓名
       message: '产品共计1 合计 ¥ 20(含运费¥ 1)', // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
       otherMessage: '运费保险 等', // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
-      order_line: orderLine,
+      orderLine: orderLine,
       userAddress: county
     };
     result.push(newArticleObject);
@@ -70,7 +70,7 @@ const onProduct = function() {
     name: '' + Random.natural(), // Random.cname() 随机生成一个常见的中文姓名
     message: '产品共计1 合计 ¥ 20(含运费¥ 1)', // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
     otherMessage: '运费保险 等', // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
-    order_line: orderLine,
+    orderLine: orderLine,
     userAddress: county,
     currentContact: { name: Random.ctitle(2, 4), tel: '' + Random.integer(11), address: county }
   };

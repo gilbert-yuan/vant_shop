@@ -7,7 +7,7 @@
             <p class="van-contact-list__text">联系人：{{ item.name }}</p>
             <p class="van-contact-list__text">联系电话：{{ item.tel }}</p>
             <p class="van-contact-list__text">地址：{{item.province}}{{item.city}}{{item.county}}{{item.address_detail}}</p>
-            <van-tag type="success" v-if="item.is_default">默认</van-tag>
+            <van-tag type="success" v-if="item.isDefault">默认</van-tag>
           </van-radio>
           <van-icon name="edit" class="van-contact-list__edit" @click="$emit('edit', item, index)" />
         </van-cell>

@@ -10,7 +10,7 @@
         <div class="van-contact-card__text">
           <div>联系人：{{ currentContact.name }}</div>
           <div>联系电话：{{ currentContact.tel }}</div>
-          <div>地址:{{currentContact.province}}{{currentContact.city}}{{currentContact.county}}{{currentContact.address_detail}}</div>
+          <div>地址:{{currentContact.province}}{{currentContact.city}}{{currentContact.county}}{{currentContact.addressDetail}}</div>
         </div>
       </template>
     </div>

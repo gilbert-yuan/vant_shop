@@ -75,7 +75,7 @@ const routes = [
       title: '订单详情'
     },
     params: {
-      order_id: 0
+      orderId: 0
     }
   }
 ];

@@ -50,7 +50,7 @@
     },
     methods: {
       onclickProduct(product) {
-        this.$router.push({ name: 'goods', params: { goods_id: product.id }});
+        this.$router.push({ name: 'goods', params: { goodsId: product.id }});
       }
     }
   };

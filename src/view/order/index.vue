@@ -81,10 +81,10 @@
           address: '13000000000',
           province: '上海市',
           city: '上海市',
-          area_code: 310110,
+          areaCode: 310110,
           county: '杨浦区',
-          is_default: false,
-          address_detail: '国伟路135号',
+          isDefault: false,
+          addressDetail: '国伟路135号',
           id: 123344
         }, {
           name: '里斯',
@@ -93,16 +93,16 @@
           province: '上海市',
           city: '上海市',
           county: '杨浦区',
-          area_code: 310110,
-          is_default: false,
-          address_detail: '国伟路135号',
+          areaCode: 310110,
+          isDefault: false,
+          addressDetail: '国伟路135号',
           id: 123345
         }]
       };
     },
     created() {
       this.vantStore.headTitle = '订单详情';
-      api.http('/get/orderDetail', { order_id: this.$route.params.order_id })
+      api.http('/get/orderDetail', { orderId: this.$route.params.order_id })
         .then(res => {
           this.orderDetail = res.result;
         });

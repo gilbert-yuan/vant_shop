@@ -136,7 +136,7 @@ export default {
                   imgUrl: 'https://img.yzcdn.cn/2.jpg'
                 }
               ],
-              k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+              skuKeyStr: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
             }
           ]
         },

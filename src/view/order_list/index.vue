@@ -8,7 +8,7 @@
           waterfall-offset="300" >
             <div v-for="order in orders" @click="viewOrderDetial(order)">
               <van-panel :title="order.name" :status="order.state.title">
-                <goods-lines :orderLines="order.order_line"></goods-lines>
+                <goods-lines :orderLines="order.orderLine"></goods-lines>
               </van-panel>
               <van-row> {{order.message}} </van-row>
               <van-row> {{order.otherMessage}} </van-row>
@@ -83,7 +83,7 @@
         this.getOrder();
       },
       viewOrderDetial(order) {
-        this.$router.push({ name: 'orderDetail', params: { order_id: order.name }});
+        this.$router.push({ name: 'orderDetail', params: { orderId: order.name }});
       },
       loadMore() {
         var self = this;
