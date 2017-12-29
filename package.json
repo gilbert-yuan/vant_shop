@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "vant": "^0.10.0",
     "vant-css": "^0.10.9",
     "vue": "^2.5.0",
