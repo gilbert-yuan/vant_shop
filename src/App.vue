@@ -1,20 +1,21 @@
 <template>
   <div id="app">
     <van-nav-bar
-      title="标题"
+      :title="headTitle"
       left-text="返回"
       left-arrow
       @clickLeft="onClickLeft"
       @clickRight="onClickRight"
       :fixed="false"
+      class="header_style"
     >
       <van-icon name="search"  slot="right" to="search"/>
     </van-nav-bar>
     <router-view/>
-    <van-tabbar v-model="active">
+    <van-tabbar v-model="active" v-if="bottomActive">
       <van-tabbar-item icon="wap-home" to="home">首页</van-tabbar-item>
-      <van-tabbar-item icon="chat" dot to="goods">分类</van-tabbar-item>
-      <van-tabbar-item icon="cart" to="Cart">购物车</van-tabbar-item>
+      <van-tabbar-item icon="chat" to="classify">分类</van-tabbar-item>
+      <van-tabbar-item icon="logistics" to="Cart">购物车</van-tabbar-item>
       <van-tabbar-item icon="contact" to="User">我的</van-tabbar-item>
     </van-tabbar>
   </div>
@@ -22,6 +23,7 @@
 
 <script>
   import { Tabbar, TabbarItem, NavBar, Icon, Popup } from 'vant';
+  import { mapState } from 'vuex';
   import SearchGoods from './view/search_goods/index.vue';
   export default {
     components: {
@@ -34,10 +36,13 @@
     },
     data() {
       return {
-        active: 0,
         show: false,
+        active: 0,
         searchValue: ''
       };
+    },
+    created() {
+      this.vantStore.headTitle = '首页';
     },
     methods: {
       onClickLeft() {
@@ -46,6 +51,13 @@
       onClickRight() {
         this.$router.push({ name: 'search' });
       }
+    },
+    computed: {
+      ...mapState({
+        bottomActive: state => state.vantStore.bottomActive,
+        headTitle: state => state.vantStore.headTitle,
+        vantStore: state => state.vantStore
+      })
     }
   };
 
@@ -56,5 +68,8 @@
     font-size: 16px;
     background-color: #f8f8f8;
     -webkit-font-smoothing: antialiased;
+  }
+  .header_style {
+    z-index: -1;
   }
 </style>

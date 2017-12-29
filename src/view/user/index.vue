@@ -42,7 +42,7 @@
 
 <script>
 import { Row, Col, Icon, Cell, CellGroup } from 'vant';
-
+import { mapState } from 'vuex';
 export default {
   components: {
     [Row.name]: Row,
@@ -64,6 +64,16 @@ export default {
     readySend() {
       this.$router.push({ name: 'orders' });
     }
+  },
+  created() {
+    this.vantStore.headTitle = '会员中心';
+  },
+  computed: {
+    ...mapState({
+      activce: state => state.vantStore.bottomActive,
+      headTitle: state => state.vantStore.headTitle,
+      vantStore: state => state.vantStore
+    })
   }
 };
 </script>

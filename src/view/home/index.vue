@@ -11,6 +11,8 @@
 <script>
   import { Swipe, SwipeItem, Lazyload, Row, Col, Cell } from 'vant';
   import ProductSwipe from '../product_swipe/index.vue';
+  import { mapState } from 'vuex';
+
   export default {
     components: {
       [Swipe.name]: Swipe,
@@ -20,6 +22,16 @@
       [Cell.name]: Cell,
       [Col.name]: Col,
       [Lazyload.name]: Lazyload
+    },
+    created() {
+      this.vantStore.headTitle = '首页';
+    },
+    computed: {
+      ...mapState({
+        activce: state => state.vantStore.bottomActive,
+        headTitle: state => state.vantStore.headTitle,
+        vantStore: state => state.vantStore
+      })
     },
     data() {
       return {

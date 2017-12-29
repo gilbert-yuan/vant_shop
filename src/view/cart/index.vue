@@ -3,7 +3,7 @@
     <van-checkbox-group class="card-goods" v-model="checkedGoods">
       <van-checkbox
         class="card-goods__item"
-        v-for="item in goods"
+        v-for="item in goodsCart"
         :key="item.id"
         :name="item.id"
       >
@@ -16,7 +16,7 @@
         />
       </van-checkbox>
     </van-checkbox-group>
-    <van-submit-bar
+    <van-submit-bar class="van-goods-submit-bar"
       :price="totalPrice"
       :disabled="!checkedGoods.length"
       :buttonText="submitBarText"
@@ -26,7 +26,7 @@
 
 <script>
 import { Checkbox, CheckboxGroup, Card, SubmitBar } from 'vant';
-
+import { mapState } from 'vuex';
 export default {
   components: {
     [Card.name]: Card,
@@ -37,29 +37,7 @@ export default {
 
   data() {
     return {
-      checkedGoods: ['1', '2', '3'],
-      goods: [{
-        id: '1',
-        title: '进口香蕉',
-        desc: '约250g，2根',
-        price: 200,
-        num: 1,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/2f9a36046449dafb8608e99990b3c205.jpeg'
-      }, {
-        id: '2',
-        title: '陕西蜜梨',
-        desc: '约600g',
-        price: 690,
-        num: 1,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/f6aabd6ac5521195e01e8e89ee9fc63f.jpeg'
-      }, {
-        id: '3',
-        title: '美国伽力果',
-        desc: '约680g/3个',
-        price: 2680,
-        num: 1,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/320454216bbe9e25c7651e1fa51b31fd.jpeg'
-      }]
+      checkedGoods: ['1', '2', '3']
     };
   },
 
@@ -68,15 +46,22 @@ export default {
       return (price / 100).toFixed(2);
     }
   },
-
+  created() {
+    this.vantStore.headTitle = '购物车';
+  },
   computed: {
     submitBarText() {
       const count = this.checkedGoods.length;
       return '结算' + (count ? `(${count})` : '');
     },
-
+    ...mapState({
+      activce: state => state.vantStore.bottomActive,
+      headTitle: state => state.vantStore.headTitle,
+      goodsCart: state => state.vantStore.goodsCart,
+      vantStore: state => state.vantStore
+    }),
     totalPrice() {
-      return this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0), 0);
+      return this.goodsCart.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price : 0), 0);
     }
   }
 };
@@ -101,6 +86,10 @@ export default {
     .van-card__price {
       color: #f44;
     }
+  }
+  .van-goods-submit-bar{
+    bottom: 50px;
+    z-index: 10000;
   }
 }
 </style>

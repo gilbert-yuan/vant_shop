@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import { Lazyload, Cell, CellGroup } from 'vant';
+import vantCss from 'vant-css';
 Vue.use(Router);
 Vue.use(Lazyload);
 Vue.use(Cell);
 Vue.use(CellGroup);
+Vue.use(vantCss);
 
 const User = r => require.ensure([], () => r(require('./view/user')), 'user');
 const Cart = r => require.ensure([], () => r(require('./view/cart')), 'cart');
@@ -12,7 +14,10 @@ const Goods = r => require.ensure([], () => r(require('./view/goods')), 'goods')
 // const App = r => require.ensure([], () => r(require('./App')), 'App');
 const Home = r => require.ensure([], () => r(require('./view/home')), 'home');
 const Search = r => require.ensure([], () => r(require('./view/search_goods')), 'search');
-const Orders = r => require.ensure([], () => r(require('./view/order_list')), 'orders');
+const OrderList = r => require.ensure([], () => r(require('./view/order_list')), 'orderList');
+const Classify = r => require.ensure([], () => r(require('./view/classify')), 'classify');
+const OrderDetail = r => require.ensure([], () => r(require('./view/order')), 'orderDetail');
+
 const routes = [
   {
     path: '*',
@@ -24,6 +29,13 @@ const routes = [
   {
     name: 'user',
     component: User,
+    meta: {
+      title: '会员中心'
+    }
+  },
+  {
+    name: 'classify',
+    component: Classify,
     meta: {
       title: '会员中心'
     }
@@ -51,9 +63,19 @@ const routes = [
   },
   {
     name: 'orders',
-    component: Orders,
+    component: OrderList,
     meta: {
       title: '订单列表'
+    }
+  },
+  {
+    name: 'orderDetail',
+    component: OrderDetail,
+    meta: {
+      title: '订单详情'
+    },
+    params: {
+      order_id: 0
     }
   }
 ];
