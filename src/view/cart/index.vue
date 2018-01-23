@@ -37,7 +37,7 @@ export default {
 
   data() {
     return {
-      checkedGoods: ['1', '2', '3']
+      checkedGoods: []
     };
   },
 

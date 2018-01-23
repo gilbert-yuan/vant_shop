@@ -37,48 +37,40 @@
         <van-goods-action-mini-btn icon="chat">
           客服
         </van-goods-action-mini-btn>
-        <van-goods-action-mini-btn icon="cart">
+        <van-goods-action-mini-btn icon="cart"  @click="showCart">
           购物车
         </van-goods-action-mini-btn>
         <van-goods-action-big-btn @click="addCartState=true">
           加入购物车
         </van-goods-action-big-btn>
-        <van-goods-action-big-btn primary>
+        <van-goods-action-big-btn primary  @click="addCartState=true">
           立即购买
         </van-goods-action-big-btn>
       </van-goods-action>
     </div>
     <van-popup v-model="addCartState" position="bottom">
-      <van-sku
+      <goods-sku
         v-model="showCustomAction"
         stepper-title="我要买"
-        :sku="goods.sku"
-        :goods="goods.goods"
+        :sku="sku"
+        :goods="goods"
         :goods-id="goods.goodsId"
         :show-add-cart-btn="true"
+        :sku-choose="chooseSku"
         :reset-stepper-on-hide="true"
-        :initial-sku="goods.initialSku"
         @buy-clicked="handleBuyClicked"
         @add-cart="handleAddCartClicked"
       >
         <!-- 隐藏 sku messages -->
-        <template slot="sku-messages"></template>
         <!-- 自定义 sku actions -->
-        <template slot="sku-actions" slot-scope="props">
-         <van-row>
-            <van-col span="12">
-              <van-goods-action-big-btn  bottom-action @click="props.skuEventBus.$emit('sku:buy')">
-                加入购物车
-              </van-goods-action-big-btn>
-           </van-col>
-            <van-col span="12">
-              <van-goods-action-big-btn primary  bottom-action @click="props.skuEventBus.$emit('sku:buy')">
-                立即购买
-              </van-goods-action-big-btn>
-            </van-col>
-          </van-row>
-        </template>
-      </van-sku>
+        <!--<template slot="sku-actions" slot-scope="props">-->
+          <!--<div class="van-sku-actions">-->
+            <!--<van-button bottom-action @click="handlePointClicked">积分兑换</van-button>-->
+            <!--&lt;!&ndash; 直接触发 sku 内部事件，通过内部事件执行 handleBuyClicked 回调 &ndash;&gt;-->
+            <!--<van-button type="primary" bottom-action @click="handleDetialBuyClicked">买买买</van-button>-->
+          <!--</div>-->
+        <!--</template>-->
+      </goods-sku>
     </van-popup>
   </div>
 </template>
@@ -94,7 +86,6 @@ import {
   Swipe,
   Toast,
   SwipeItem,
-  Sku,
   Popup,
   Row,
   GoodsAction,
@@ -102,12 +93,13 @@ import {
   GoodsActionMiniBtn
 } from 'vant';
 import { mapState } from 'vuex';
-
+import GoodsSku from '../good_sku/containers/SkuContainer.vue';
+import api from '../../axios/api.js';
 export default {
   components: {
     [Tag.name]: Tag,
+    [GoodsSku.name]: GoodsSku,
     [Col.name]: Col,
-    [Sku.name]: Sku,
     [Row.name]: Row,
     [button.name]: button,
     [Popup.name]: Popup,
@@ -126,43 +118,42 @@ export default {
     return {
       addCartState: false,
       showCustomAction: true,
+      chooseSku: {},
+      sku: {},
       goods: {
-        title: '美国伽力果（约680g/3个）',
-        price: 2680,
-        goodsId: 30349,
-        express: '免运费',
-        sku: {
-          // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
-          // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
-          tree: [
-            {
-              k: '颜色', // skuKeyName：规格类目名称
-              v: [
-                {
-                  id: '30349', // skuValueId：规格值 id
-                  name: '红色', // skuValueName：规格值名称
-                  imgUrl: 'https://img.yzcdn.cn/1.jpg' // 规格类目图片，只有第一个规格类目可以定义图片
-                },
-                {
-                  id: '1215',
-                  name: '蓝色',
-                  imgUrl: 'https://img.yzcdn.cn/2.jpg'
-                }
-              ],
-              skuKeyStr: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-            }
-          ]
-        },
-        picture: 'https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg',
+        // 商品标题
+        title: '测试商品',
+        price: '1000',
         thumb: [
-          'https://img.yzcdn.cn/public_files/2017/10/24/e5a5a02309a41f9f5def56684808d9ae.jpeg',
-          'https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg'
-        ]
+          'http://img13.360buyimg.com/n0/jfs/t6115/200/8176463418/138238/65662816/5987c829N9c0f5286.jpg',
+          'http://img13.360buyimg.com/n0/jfs/t6043/305/5636125253/87985/21230f90/596f169aN1246fe10.jpg'
+        ],
+        // 默认商品 sku 缩略图
+        picture: 'http://img13.360buyimg.com/n4/jfs/t6043/305/5636125253/87985/21230f90/596f169aN1246fe10.jpg'
+      },
+      skuData: {
+//        // 商品 id
+//        goodsId: '946755',
+//        // 留言信息
+//        selectedNum: 1,
+//        // 选择的 sku 组合
+//        selectedSkuComb: {
+//          id: 2257,
+//          price: 100,
+//          s1: '30349',
+//          s2: '1193',
+//          s3: '0',
+//          stock_num: 111
+//        }
       }
     };
   },
   created() {
     this.vantStore.headTitle = '产品详情';
+    api.http('/get/getGoodsSku', { orderId: this.$route.params.order_id })
+      .then(res => {
+        this.sku = res.result;
+      });
   },
   computed: {
     ...mapState({
@@ -173,16 +164,34 @@ export default {
     })
   },
   methods: {
-    handleBuyClicked() {
-      console.log('--------handleBuyClicked');
+    OnClickColseOverlay() {
+      this.addCartState = true;
     },
-    handleAddCartClicked() {
+    handleBuyClicked({ goodsId, selectedNum, selectedSkuComb }) {
+      var self = this;
+      api.http('/get/getGoodsCartMessage', { orderId: this.$route.params.order_id })
+        .then(res => {
+          console.log(self.vantStore.goodsCart);
+          res.result['num'] = selectedNum;
+          res.result['id'] = this.vantStore.goodsCart.length + 1;
+          self.vantStore.goodsCart.push(res.result);
+        });
+    },
+    handleAddCartClicked({ goodsId, selectedNum, selectedSkuComb }) {
+      console.log(goodsId, 'goodsId');
+      console.log(selectedNum, 'selectedNum');
+      console.log(selectedSkuComb, 'selectedSkuComb');
       console.log('--------handleAddCartClicked');
+      var self = this;
+      api.http('/get/getGoodsCartMessage', { orderId: this.$route.params.order_id })
+        .then(res => {
+          console.log(self.vantStore.goodsCart);
+          self.vantStore.goodsCart.push(res.result);
+        });
+      Toast('加入购物车成功！');
     },
-    AddCart() {
-      this.goodsCart.push(this.goods);
-      // Toast('添加成功！');
-      // console.log('--------');
+    showCart() {
+      this.$router.push({ 'name': 'cart' });
     },
     formatPrice() {
       return '¥' + (this.goods.price / 100).toFixed(2);

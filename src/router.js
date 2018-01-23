@@ -17,6 +17,7 @@ const Search = r => require.ensure([], () => r(require('./view/search_goods')), 
 const OrderList = r => require.ensure([], () => r(require('./view/order_list')), 'orderList');
 const Classify = r => require.ensure([], () => r(require('./view/classify')), 'classify');
 const OrderDetail = r => require.ensure([], () => r(require('./view/order')), 'orderDetail');
+const goodsList = r => require.ensure([], () => r(require('./view/goods_list')), 'goodsList');
 
 const routes = [
   {
@@ -73,9 +74,13 @@ const routes = [
     component: OrderDetail,
     meta: {
       title: '订单详情'
-    },
-    params: {
-      orderId: 0
+    }
+  },
+  {
+    name: 'goodsList',
+    component: goodsList,
+    meta: {
+      title: '产品列表'
     }
   }
 ];

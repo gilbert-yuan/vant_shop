@@ -85,6 +85,7 @@
   }
   .top_van_swipe{
     height: 200px;
+    width: 100%;
   }
   .home_van_swipe_image{
     height: 180px;

@@ -33,7 +33,7 @@
 <script>
   import { Card, ContactCard, ContactList, ContactEdit, Popup, AddressEdit, Area } from 'vant';
   import api from '../../axios/api.js';
-  import shopAddress from '../addressList/index.vue';
+  import shopAddress from '../address_list/index.vue';
   import AddressList from '../address/index.vue';
   import areaList from '../../common/data/area.json';
   import { mapState } from 'vuex';
