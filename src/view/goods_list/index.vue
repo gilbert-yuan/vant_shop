@@ -5,7 +5,7 @@
       waterfall-disabled="disabled"
       waterfall-offset="400"
     >
-      <template v-for="goods in goods_list">
+      <template v-for="goods in goodsList">
         <div @click="viewGoodsDetail(goods)">
           <van-card
             :title="goods.name"
@@ -34,12 +34,12 @@
       api.http('/get/goodsList', { params: { domain: '', limit: 10, offset: 5 }})
         .then(res => {
           console.log(res.result);
-          this.goods_list = res.result;
+          this.goodsList = res.result;
         });
     },
     data() {
       return {
-        goods_list: []
+        goodsList: []
       };
     },
     methods: {
@@ -50,7 +50,7 @@
           .then(res => {
             if (res.result) {
               res.result.forEach(function(value) {
-                self.goods_list.push(value);
+                self.goodsList.push(value);
               });
             }
           });

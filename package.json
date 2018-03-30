@@ -1,5 +1,5 @@
 {
-  "name": "vant-demo",
+  "name": "vant-shop",
   "version": "1.0.0",
   "description": "Collection of vant demos.",
   "author": "陈嘉涵 <chenjiahan@youzan.com>",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "puppeteer": "^1.2.0",
     "vant": "^0.10.0",
     "vant-css": "^0.10.9",
     "vue": "^2.5.0",
@@ -70,5 +71,15 @@
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
-  }
+  },
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilbert-yuan/vant_shop.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gilbert-yuan/vant_shop/issues"
+  },
+  "homepage": "https://github.com/gilbert-yuan/vant_shop#readme"
 }

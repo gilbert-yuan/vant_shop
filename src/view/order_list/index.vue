@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-tabs :active="active"  @click="onClicOrderType">
-      <van-tab v-for="type in orderType" :title="type.name" :fixed="true">
+      <van-tab v-for="(type, index) in orderType" :title="type.name" :fixed="true" :key="index">
         <div class="div_scroll"
           v-waterfall-lower="loadMore"
           waterfall-disabled="true"

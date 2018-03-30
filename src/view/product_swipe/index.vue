@@ -2,7 +2,7 @@
   <div>
     <van-row><h4>{{title}}</h4></van-row>
     <van-swipe :autoplay="3000" class="goods_van_swipe">
-      <van-swipe-item v-for="frequencyIndex in productList">
+      <van-swipe-item v-for="(frequencyIndex, index) in productList" :key="index">
         <van-row>
           <template v-for="product in competitiveProducts.slice(frequencyIndex * productNum, frequencyIndex * productNum + productNum)">
             <div @click="onclickProduct(product)" class="cell_product">

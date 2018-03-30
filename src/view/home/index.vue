@@ -1,13 +1,13 @@
 <template>
   <div id="home" >
     <van-swipe :autoplay="4000" class="top_van_swipe">
-      <van-swipe-item v-for="image in images">
+      <van-swipe-item v-for="(image, index) in images" :key="index">
         <img v-lazy="image.image" class="home_van_swipe_image" />
       </van-swipe-item>
     </van-swipe>
     <div>
-      <van-row  v-for="catRow in hotCat" class="row_col_span">
-        <template v-for="row in catRow">
+      <van-row  v-for="(catRow, index) in hotCat" class="row_col_span" :key="index">
+        <div v-for="(row, index) in catRow" :key="index">
           <div @click="onClickCatRow(row)">
             <van-col span="6" class="row_col_img" >
               <van-row >
@@ -16,7 +16,7 @@
               <span>{{row.name}}</span>
             </van-col>
           </div>
-        </template>
+        </div>
       </van-row>
     </div>
     <product-swipe :competitiveProducts="competitiveProducts.product"

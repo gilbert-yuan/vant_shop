@@ -286,7 +286,7 @@ var thumbs = [
   'jfs/t6043/305/5636125253/87985/21230f90/596f169aN1246fe10.jpg'
 ];
 var getGoodsCartMessage = function() {
-  var return_val = {
+  var returnVal = {
     title: Random.ctitle(2, 4),
     num: Random.integer(1, 10),
     thumb: 'http://img13.360buyimg.com/n0/' + thumbs[Random.integer(0, thumbs.length)],
@@ -294,8 +294,39 @@ var getGoodsCartMessage = function() {
     desc: Random.ctitle(6, 8)
   };
   return {
-    result: return_val
+    result: returnVal
   };
 };
 Mock.mock('/get/getGoodsCartMessage', 'post', getGoodsCartMessage);
+
+var getGoodsClassList = function() {
+  var result = [
+    { index: 1, id: 6196, text: '厨具', children: [] },
+    { index: 2, id: 9847, text: '家具', children: [] },
+    { index: 3, id: 9987, text: '手机', children: [] },
+    { index: 4, id: 1319, text: '母婴', children: [] },
+    { index: 5, id: 12218, text: '生鲜', children: [] },
+    { index: 6, id: 12259, text: '酒类', children: [] },
+    { index: 7, id: 5025, text: '钟表', children: [] },
+    { index: 8, id: 9192, text: '医药保健', children: [] },
+    { index: 9, id: 6994, text: '宠物生活', children: [] },
+    { index: 10, id: 652, text: '数码', children: [] }
+  ];
+  for (var i = 0; i < result.length; i++) {
+    var secondClass = [];
+    for (var j = 0; j < Random.integer(10, 20); j++) {
+      var thirdClass = [];
+      for (var k = 0; k <= Random.integer(10, 20); k++) {
+        thirdClass.push({ index: k, id: Random.integer(100000, 3000000), text: Random.ctitle(2, 4) });
+      }
+      secondClass.push({ index: j, id: Random.integer(100000, 3000000), text: Random.ctitle(2, 4), children: thirdClass });
+    }
+    result[i].children = secondClass;
+  }
+  return {
+    result: result
+  };
+};
+console.log(getGoodsClassList);
+Mock.mock('/get/classList', 'post', getGoodsClassList);
 

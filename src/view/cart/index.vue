@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-checkbox-group class="card-goods" v-model="checkedGoods">
+    <van-checkbox-group class="card-goods" v-model="checkedGoods" style="margin-bottom: 35px">
       <van-checkbox
         class="card-goods__item"
         v-for="item in goodsCart"

@@ -27,7 +27,9 @@
         @change-detail="onChangeDetail"
       />
     </van-popup>
-
+    <van-panel title="标题" desc="描述信息" status="状态">
+      <div>内容</div>
+    </van-panel>
   </div>
 </template>
 <script>

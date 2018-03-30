@@ -1,5 +1,6 @@
 <template>
-  <van-popup v-model="show" v-if="!isSkuEmpty" position="bottom" lockOnScroll preventScroll>
+  <van-popup v-model="show" v-if="!isSkuEmpty" position="bottom" lockOnScroll preventScroll
+             :close-on-click-overlay='false' :overlay="false">
     <div class="van-sku-container">
       <div class="van-sku-layout">
         <slot name="sku-header" :skuEventBus="skuEventBus" :selectedSku="selectedSku" :selectedSkuComb="selectedSkuComb">
@@ -47,16 +48,17 @@
               :hideStock="hideStock">
             </van-sku-stepper>
           </slot>
+
         </div>
-        <slot name="sku-actions" :skuEventBus="skuEventBus">
-          <van-sku-actions
-            :skuEventBus="skuEventBus"
-            :buyText="buyText"
-            :showAddCartBtn="showAddCartBtn">
-          </van-sku-actions>
-        </slot>
       </div>
     </div>
+    <slot name="sku-actions" :skuEventBus="skuEventBus">
+      <van-sku-actions
+        :skuEventBus="skuEventBus"
+        :buyText="buyText"
+        :showAddCartBtn="showAddCartBtn">
+      </van-sku-actions>
+    </slot>
   </van-popup>
 </template>
 

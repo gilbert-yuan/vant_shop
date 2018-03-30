@@ -48,9 +48,7 @@
         </van-goods-action-big-btn>
       </van-goods-action>
     </div>
-    <van-popup v-model="addCartState" position="bottom">
-      <goods-sku
-        v-model="showCustomAction"
+    <goods-sku v-model="addCartState"
         stepper-title="我要买"
         :sku="sku"
         :goods="goods"
@@ -61,17 +59,7 @@
         @buy-clicked="handleBuyClicked"
         @add-cart="handleAddCartClicked"
       >
-        <!-- 隐藏 sku messages -->
-        <!-- 自定义 sku actions -->
-        <!--<template slot="sku-actions" slot-scope="props">-->
-          <!--<div class="van-sku-actions">-->
-            <!--<van-button bottom-action @click="handlePointClicked">积分兑换</van-button>-->
-            <!--&lt;!&ndash; 直接触发 sku 内部事件，通过内部事件执行 handleBuyClicked 回调 &ndash;&gt;-->
-            <!--<van-button type="primary" bottom-action @click="handleDetialBuyClicked">买买买</van-button>-->
-          <!--</div>-->
-        <!--</template>-->
       </goods-sku>
-    </van-popup>
   </div>
 </template>
 
@@ -86,7 +74,6 @@ import {
   Swipe,
   Toast,
   SwipeItem,
-  Popup,
   Row,
   GoodsAction,
   GoodsActionBigBtn,
@@ -102,7 +89,6 @@ export default {
     [Col.name]: Col,
     [Row.name]: Row,
     [button.name]: button,
-    [Popup.name]: Popup,
     [Icon.name]: Icon,
     [Toast.name]: Toast,
     [Cell.name]: Cell,
@@ -171,24 +157,23 @@ export default {
       var self = this;
       api.http('/get/getGoodsCartMessage', { orderId: this.$route.params.order_id })
         .then(res => {
-          console.log(self.vantStore.goodsCart);
           res.result['num'] = selectedNum;
           res.result['id'] = this.vantStore.goodsCart.length + 1;
           self.vantStore.goodsCart.push(res.result);
         });
+      Toast('加入购物车成功！');
+      this.addCartState = false;
     },
     handleAddCartClicked({ goodsId, selectedNum, selectedSkuComb }) {
-      console.log(goodsId, 'goodsId');
-      console.log(selectedNum, 'selectedNum');
-      console.log(selectedSkuComb, 'selectedSkuComb');
-      console.log('--------handleAddCartClicked');
       var self = this;
       api.http('/get/getGoodsCartMessage', { orderId: this.$route.params.order_id })
         .then(res => {
-          console.log(self.vantStore.goodsCart);
+          res.result['num'] = selectedNum;
+          res.result['id'] = this.vantStore.goodsCart.length + 1;
           self.vantStore.goodsCart.push(res.result);
         });
       Toast('加入购物车成功！');
+      this.addCartState = false;
     },
     showCart() {
       this.$router.push({ 'name': 'cart' });
