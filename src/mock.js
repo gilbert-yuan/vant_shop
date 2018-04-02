@@ -48,14 +48,26 @@ const onProduct = function() {
   var orderLine = [];
   var lineLength = Random.integer(1, 5);
   console.log(Random.integer(1, 5));
-  for (let i = 0; i < lineLength; i++) {
-    orderLine.push({
-      image: Random.image('200x100'),
-      price: Random.float(1, 1000),
-      num: Random.integer(1, 10),
-      desc: Random.ctitle(2, 5) + '重约' + Random.integer(1, 5000) + 'g',
-      title: Random.ctitle(5, 8)
-    });
+  var statusList = ['已发货', '准备中', '已签收', '已完成', '派送中', '快递中'];
+  var shopList = [];
+  var allCost = 0;
+  for (let j = 0; j < Random.integer(2, 4); j++) {
+    orderLine = [];
+    for (let i = 0; i < lineLength; i++) {
+      var price = Random.integer(1, 1000);
+      var num = Random.integer(1, 10);
+      orderLine.push({
+        image: Random.image('180x200'),
+        price: price,
+        num: num,
+        desc: Random.ctitle(2, 5) + '重约' + Random.integer(1, 5000) + 'g',
+        title: Random.ctitle(5, 8)
+      });
+      allCost = allCost + price * num * 100;
+    }
+    shopList.push({ productLine: orderLine,
+      status: statusList[Random.integer(0, 5)],
+      shopName: Random.ctitle(2, 5) });
   }
   var province = Random.province();
   var city = Random.city(province);
@@ -70,7 +82,9 @@ const onProduct = function() {
     name: '' + Random.natural(), // Random.cname() 随机生成一个常见的中文姓名
     message: '产品共计1 合计 ¥ 20(含运费¥ 1)', // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
     otherMessage: '运费保险 等', // Random.date()指示生成的日期字符串的格式,默认为yyyy-MM-dd；Random.time() 返回一个随机的时间字符串
-    orderLine: orderLine,
+    shopList: shopList,
+    allPrice: allCost,
+    originPrice: allCost,
     userAddress: county,
     currentContact: { name: Random.ctitle(2, 4), tel: '' + Random.integer(11), address: county }
   };
@@ -79,6 +93,7 @@ const onProduct = function() {
   };
 };
 Mock.mock('/get/orderDetail', 'post', onProduct);
+
 const homePage = function() {
   var allData = { hotCat: '', images: '', competitiveProducts: '' };
   var hotRowLine = [];
@@ -329,4 +344,34 @@ var getGoodsClassList = function() {
 };
 console.log(getGoodsClassList);
 Mock.mock('/get/classList', 'post', getGoodsClassList);
+
+var getAddressList = function() {
+  var returnVal = [{
+    name: '张三',
+    tel: '13000000000',
+    address: '13000000000',
+    province: '上海市',
+    city: '上海市',
+    areaCode: 310110,
+    county: '杨浦区',
+    isDefault: false,
+    addressDetail: '国伟路135号',
+    id: 123344
+  }, {
+    name: '里斯',
+    tel: '13000000000',
+    address: '13000000000',
+    province: '上海市',
+    city: '上海市',
+    county: '杨浦区',
+    areaCode: 310110,
+    isDefault: false,
+    addressDetail: '国伟路135号',
+    id: 123345
+  }];
+  return {
+    result: returnVal
+  };
+};
+Mock.mock('/get/address_list', 'post', getAddressList);
 

@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div style="margin-bottom: 100px">
     <shop-address
       :type="cardType"
       :currentContact="currentContact"
-      @click="showList = true"
+      @click="showAddressList = true"
     />
-    <van-popup v-model="showList" position="bottom"  class="pop-full">
+    <van-popup v-model="showAddressList" position="bottom"  class="pop-full">
       <address-list
         v-model="chosenContactId"
-        :list="list"
+        :list="addressList"
         @add="onAdd"
         @edit="onEdit"
         @select="onSelect"
@@ -27,22 +27,69 @@
         @change-detail="onChangeDetail"
       />
     </van-popup>
-    <van-panel title="标题" desc="描述信息" status="状态">
-      <div>内容</div>
-    </van-panel>
+    <div v-for="shop in  orderDetail.shopList">
+      <van-panel :title="shop.shopName" desc="" :status="shop.status">
+        <div v-for="(line, index) in shop.productLine" :key="index">
+          <van-card
+            :title="line.title"
+            :desc="line.desc"
+            :num="line.num"
+            :price="line.price"
+            :thumb="line.image"
+          />
+        </div>
+      </van-panel>
+    </div>
+    <!-- 优惠券单元格 -->
+    <van-coupon-cell
+      :coupons="coupons"
+      :chosen-coupon="chosenCoupon"
+      @click="showCouponList = true"
+    />
+
+    <!-- 优惠券列表 -->
+    <van-popup v-model="showCouponList" position="bottom">
+      <van-coupon-list
+        :coupons="coupons"
+        :chosen-coupon="chosenCoupon"
+        :disabled-coupons="disabledCoupons"
+        @change="onChange"
+        @exchange="onExchange"
+      />
+    </van-popup>
+    <van-submit-bar
+      :price="orderDetail.allPrice"
+      button-text="提交订单"
+      @submit="onSubmit"
+    />
   </div>
 </template>
 <script>
-  import { Card, ContactCard, ContactList, ContactEdit, Popup, AddressEdit, Area } from 'vant';
+  import { Card, ContactCard, ContactList, ContactEdit, Popup, AddressEdit, Area, Panel, CouponCell, CouponList, SubmitBar } from 'vant';
   import api from '../../axios/api.js';
   import shopAddress from '../address_list/index.vue';
   import AddressList from '../address/index.vue';
   import areaList from '../../common/data/area.json';
   import { mapState } from 'vuex';
+  const coupon = {
+    available: 1,
+    discount: 0,
+    denominations: 150,
+    origin_condition: 0,
+    reason: '',
+    value: 150,
+    name: '优惠券名称',
+    start_at: 1489104000,
+    end_at: 1514592000
+  };
   export default {
     name: 'goods-lines',
     components: {
       [Card.name]: Card,
+      [CouponCell.name]: CouponCell,
+      [SubmitBar.name]: SubmitBar,
+      [CouponList.name]: CouponList,
+      [Panel.name]: Panel,
       [AddressList.name]: AddressList,
       [Area.name]: Area,
       [ContactCard.name]: ContactCard,
@@ -58,7 +105,7 @@
       },
       currentContact() {
         const id = this.chosenContactId;
-        return id !== null ? this.list.filter(item => item.id === id)[0] : {};
+        return id !== null ? this.addressList.filter(item => item.id === id)[0] : {};
       },
       ...mapState({
         activce: state => state.vantStore.bottomActive,
@@ -66,40 +113,23 @@
         vantStore: state => state.vantStore
       })
     },
+
     data() {
       return {
         areaList: areaList,
         orderDetail: {},
         chosenContactId: null,
         editingContact: {},
-        showList: false,
+        showAddressList: false,
+        showCouponList: false,
         showEdit: false,
         addressInfo: {},
         searchResult: [],
         isEdit: false,
-        list: [{
-          name: '张三',
-          tel: '13000000000',
-          address: '13000000000',
-          province: '上海市',
-          city: '上海市',
-          areaCode: 310110,
-          county: '杨浦区',
-          isDefault: false,
-          addressDetail: '国伟路135号',
-          id: 123344
-        }, {
-          name: '里斯',
-          tel: '13000000000',
-          address: '13000000000',
-          province: '上海市',
-          city: '上海市',
-          county: '杨浦区',
-          areaCode: 310110,
-          isDefault: false,
-          addressDetail: '国伟路135号',
-          id: 123345
-        }]
+        chosenCoupon: -1,
+        coupons: [coupon],
+        disabledCoupons: [coupon],
+        addressList: []
       };
     },
     created() {
@@ -108,11 +138,34 @@
         .then(res => {
           this.orderDetail = res.result;
         });
+      api.http('/get/address_list', {})
+        .then(res => {
+          this.addressList = res.result;
+          this.chosenContactId = this.addressList ? this.addressList[0].id : 0;
+        });
     },
     methods: {
+      // 优惠券相关操作
+      onChange(index) {
+        console.log(index);
+        this.showCouponList = false;
+        this.chosenCoupon = index;
+        if (index >= 0 && this.coupons[index].discount) {
+          console.log(this.orderDetail.originPrice, this.coupons[index].discount, '-----------');
+          this.orderDetail.allPrice = this.orderDetail.originPrice * this.coupons[index].discount;
+        } else if (index >= 0) {
+          console.log(this.coupons[index].value, '-----------', this.orderDetail.originPrice);
+          this.orderDetail.allPrice = this.orderDetail.originPrice - this.coupons[index].value;
+        } else {
+          this.orderDetail.allPrice = this.orderDetail.originPrice;
+        }
+      },
+      onExchange(code) {
+        this.coupons.push(coupon);
+      },
       // 添加联系人
       onAdd() {
-        this.editingContact = { id: this.list.length };
+        this.editingContact = { id: this.addressList.length };
         console.log(this.editingContact, 'editingContact');
         this.isEdit = false;
         this.showEdit = true;
@@ -129,39 +182,38 @@
 
       // 选中联系人
       onSelect() {
-        this.showList = false;
+        this.showAddressList = false;
       },
 
       // 保存联系人
       onSave(info) {
         this.showEdit = false;
-        this.showList = false;
+        this.showAddressList = false;
 
         if (this.isEdit) {
-          this.list = this.list.map(item => item.id === info.id ? info : item);
+          this.addressList = this.addressList.map(item => item.id === info.id ? info : item);
         } else {
-          this.list.push(info);
+          this.addressList.push(info);
         }
         this.chosenContactId = info.id;
       },
       onChangeDetail(val) {
-//        if (val) {
-//          this.searchResult = [{
-//            name: '黄龙万科中心',
-//            address: '杭州市西湖区'
-//          }];
-//        } else {
-//          this.searchResult = [];
-//        }
       },
       // 删除联系人
       onDelete(info) {
         this.showEdit = false;
-        this.list = this.list.filter(item => item.id !== info.id);
+        this.addressList = this.addressList.filter(item => item.id !== info.id);
         if (this.chosenContactId === info.id) {
           this.chosenContactId = null;
         }
+      },
+      // 提交订单的方法
+      onSubmit: function() {
+
       }
+    },
+    watch: {
+
     }
   };
 
